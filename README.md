@@ -1,5 +1,8 @@
 # Supabase Direct Migrate
 
+![Go Version](https://img.shields.io/badge/go-1.21+-blue)
+![License](https://img.shields.io/badge/license-MIT-green)
+
 Go tool to apply Supabase migrations directly to PostgreSQL database without needing the Supabase CLI.
 
 ## Features

@@ -5,6 +5,7 @@ import (
 	"crypto/sha256"
 	"database/sql"
 	"encoding/hex"
+	"flag"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -91,10 +92,47 @@ func loadLocalMigrations() ([]Migration, error) {
 	return migrations, nil
 }
 
+func printHelp() {
+	fmt.Println("Supabase Direct Migrate")
+	fmt.Println("Apply Supabase migrations directly to PostgreSQL database")
+	fmt.Println()
+	fmt.Println("Usage:")
+	fmt.Println("  supabase-direct-migrate [flags]")
+	fmt.Println()
+	fmt.Println("Flags:")
+	fmt.Println("  -h, --help    Show this help message")
+	fmt.Println()
+	fmt.Println("Environment Variables:")
+	fmt.Println("  DATABASE_URL    PostgreSQL connection string (required)")
+	fmt.Println("                  Example: postgres://user:password@host:port/database")
+	fmt.Println()
+	fmt.Println("Migrations Directory:")
+	fmt.Println("  Place your migration files in ./supabase/migrations/")
+	fmt.Println("  Format: {timestamp}_{name}.sql")
+	fmt.Println("  Example: 20240101120000_create_users_table.sql")
+	fmt.Println()
+	fmt.Println("Examples:")
+	fmt.Println("  export DATABASE_URL=\"postgres://postgres:postgres@localhost:5432/mydb\"")
+	fmt.Println("  supabase-direct-migrate")
+	fmt.Println()
+	fmt.Println("For more information, visit:")
+	fmt.Println("  https://github.com/DaviSMoura/supabase-direct-migrate")
+}
+
 func main() {
+	help := flag.Bool("help", false, "Show help message")
+	flag.BoolVar(help, "h", false, "Show help message")
+	flag.Parse()
+
+	if *help {
+		printHelp()
+		os.Exit(0)
+	}
+
 	dbURL := os.Getenv("DATABASE_URL")
 	if dbURL == "" {
 		fmt.Println("Error: DATABASE_URL environment variable is required")
+		fmt.Println("Run with --help for usage information")
 		os.Exit(1)
 	}
 
